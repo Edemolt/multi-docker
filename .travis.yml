@@ -1,0 +1,18 @@
+sudo: required
+language: generic
+
+services:
+  - docker
+
+before_install:
+  - docker build -t demolt/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true demolt/react-test npm test
+
+after_success:
+  - docker build -t demolt/multi-client ./client
+  - docker build -t demolt/multi-nginx ./nginx
+  - docker build -t demolt/multi-server ./server
+  - docker build -t demolt/multi-worker ./worker
+
