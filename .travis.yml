@@ -16,10 +16,10 @@ after_success:
   - docker build -t demolt/multi-server ./server
   - docker build -t demolt/multi-worker ./worker
 
-# Login to Docker CLI
+  # Login to Docker CLI
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
 
-# Push images to Docker Hub
+  # Push images to Docker Hub
   - docker push demolt/multi-client
   - docker push demolt/multi-nginx
   - docker push demolt/multi-server
@@ -29,9 +29,6 @@ before_deploy:
   # Install AWS CLI
   - pip install --user awscli
   - export PATH=$PATH:$HOME/.local/bin
-
-  # Check if the environment exists
-  - if ! aws elasticbeanstalk describe-environments --region ap-southeast-2 --environment-names MultiDocker-env | grep -q "EnvironmentName"; then echo "Environment MultiDocker-env does not exist"; exit 1; fi
 
 deploy:
   provider: elasticbeanstalk
