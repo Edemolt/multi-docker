@@ -1,28 +1,40 @@
-
 {
     "AWSEBDockerrunVersion": 2,
     "containerDefinitions": [
         {
-            "name": "clinet",
-            "image": "demolt/muti-client",
+            "name": "client",
+            "image": "demolt/multi-client",
             "hostname": "client",
             "essential": false
         },
         {
             "name": "server",
-            "image": "demolt/muti-server",
+            "image": "demolt/multi-server",
             "hostname": "api",
-            "essential": false
+            "essential": false,
+            "environment": [
+                { "name": "REDIS_HOST", "value": "multi-docker-redis.ens0az.ng.0001.apse2.cache.amazonaws.com" },
+                { "name": "REDIS_PORT", "value": "6379" },
+                { "name": "PGUSER", "value": "postgres" },
+                { "name": "PGHOST", "value": "multi-docker-postgres.c5cc4oe2sopd.ap-southeast-2.rds.amazonaws.com" },
+                { "name": "PGDATABASE", "value": "fibvalues" },
+                { "name": "PGPASSWORD", "value": "postgrespassword" },
+                { "name": "PGPORT", "value": "fibvalues" }
+            ]
         },
         {
             "name": "worker",
-            "image": "demolt/muti-worker",
+            "image": "demolt/multi-worker",
             "hostname": "worker",
-            "essential": false
+            "essential": false,
+            "environment": [
+                { "name": "REDIS_HOST", "value": "multi-docker-redis.ens0az.ng.0001.apse2.cache.amazonaws.com" },
+                { "name": "REDIS_PORT", "value": "6379" }
+            ]
         },
         {
             "name": "nginx",
-            "image": "demolt/muti-nginx", 
+            "image": "demolt/multi-nginx", 
             "essential": true,
             "portMappings": [
                 {
@@ -30,7 +42,7 @@
                     "containerPort": 80
                 }
             ],
-            "links": ["clinet", "server"]
+            "links": ["client", "server"]
         }
     ]
 }
