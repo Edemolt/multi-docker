@@ -16,3 +16,11 @@ after_success:
   - docker build -t demolt/multi-server ./server
   - docker build -t demolt/multi-worker ./worker
 
+# login to docker cli
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+
+# push images to docker hub
+  - docker push demolt/multi-client
+  - docker push demolt/multi-nginx
+  - docker push demolt/multi-server
+  - docker push demolt/multi-worker
