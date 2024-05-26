@@ -15,34 +15,22 @@ after_success:
   - docker build -t demolt/multi-nginx ./nginx
   - docker build -t demolt/multi-server ./server
   - docker build -t demolt/multi-worker ./worker
-
-  # Login to Docker CLI
+  # Log in to the docker CLI
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
-
-  # Push images to Docker Hub
+  # Take those images and push them to docker hub
   - docker push demolt/multi-client
   - docker push demolt/multi-nginx
   - docker push demolt/multi-server
   - docker push demolt/multi-worker
 
-before_deploy:
-  # Install AWS CLI
-  - pip install --user awscli
-  - export PATH=$PATH:$HOME/.local/bin
-
 deploy:
   provider: elasticbeanstalk
-  region: "ap-southeast-2"
-  app: "multi-docker"
-  env: "MultiDocker-env"
-  bucket_name: "elasticbeanstalk-ap-southeast-2-891376959231"
-  bucket_path: "multi-docker"
+  region: '-ap-southeast-2'
+  app: 'multi-docker'
+  env: 'MultiDocker-env'
+  bucket_name: 'elasticbeanstalk-ap-southeast-2-891376959231'
+  bucket_path: 'docker-multi'
   on:
-    branch: master
+    branch: main
   access_key_id: $AWS_ACCESS_KEY
   secret_access_key: $AWS_SECRET_KEY
-
-after_deploy:
-  # Ensure the environment is healthy
-  - aws elasticbeanstalk wait environment-health --environment-name MultiDocker-env --region ap-southeast-2
-  - aws elasticbeanstalk describe-environments --region ap-southeast-2 --environment-names MultiDocker-env

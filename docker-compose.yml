@@ -1,14 +1,11 @@
-version: "3"
-
+version: '3'
 services:
-
   client:
-    image: "demolt/multi-client"
+    image: 'demolt/multi-client'
     mem_limit: 128m
     hostname: client
-
   server:
-    image: "demolt/multi-server"
+    image: 'demolt/multi-server'
     mem_limit: 128m
     hostname: api
     environment:
@@ -19,18 +16,16 @@ services:
       - PGDATABASE=$PGDATABASE
       - PGPASSWORD=$PGPASSWORD
       - PGPORT=$PGPORT
-
   worker:
-    image: "demolt/multi-worker"
+    image: 'demolt/multi-worker'
     mem_limit: 128m
     hostname: worker
     environment:
       - REDIS_HOST=$REDIS_HOST
       - REDIS_PORT=$REDIS_PORT
-      
   nginx:
-    image: "demolt/multi-nginx"
+    image: 'demolt/multi-nginx'
     mem_limit: 128m
     hostname: nginx
     ports:
-      - "80:80"
+      - '80:80'
